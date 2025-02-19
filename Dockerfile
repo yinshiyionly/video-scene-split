@@ -76,4 +76,4 @@ ENV NVIDIA_DRIVER_CAPABILITIES=compute,video,utility
 EXPOSE 9000
 
 # 启动命令
-CMD ["python3", "/app/server/api_server.py"]
+#CMD ["python3", "/app/server/api_server.py"]

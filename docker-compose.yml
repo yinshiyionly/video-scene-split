@@ -23,3 +23,5 @@ services:
     restart: unless-stopped
     networks:
       - video_scene_split_net
+    entrypoint: tail
+    command: ["-f", "/dev/null"]

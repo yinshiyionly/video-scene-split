@@ -29,7 +29,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libxcb-xfixes0-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# 下载并安装nv-codec-headers
+# 下载并安装nv-codec-headers 注意显卡驱动版本
 RUN git clone https://github.com/FFmpeg/nv-codec-headers.git && \
     cd nv-codec-headers && \
     git checkout n12.2.72.0 && \

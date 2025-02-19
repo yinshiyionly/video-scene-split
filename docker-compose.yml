@@ -22,6 +22,6 @@ services:
       - "9000:9000"
     restart: unless-stopped
     networks:
-      - video_scene_split_test_net
+      - default_net
     entrypoint: tail
     command: ["-f", "/dev/null"]

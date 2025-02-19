@@ -27,7 +27,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libxcb1-dev \
     libxcb-shm0-dev \
     libxcb-xfixes0-dev \
-    nvidia-driver-libs-headless \
     && rm -rf /var/lib/apt/lists/*
 
 # 下载并安装nv-codec-headers 注意显卡驱动版本

@@ -47,14 +47,15 @@ chmod +x start.sh
 
 ```bash
 # 拉取镜像
-docker pull catchoco/transnetv2:latest
+docker pull catchoco/video-scene-split:latest
 
 # 运行容器
 docker run -d \
   --gpus all \
-  -p 5000:5000 \
-  -v /path/to/videos:/app/videos \
-  catchoco/transnetv2:latest
+  -p 9000:9000 \
+  -v /opt/test/data:/app/data \
+  -v /opt/test/video-scene-split:/app \
+  catchoco/video-scene-split:latest
 ```
 
 ### 本地安装

@@ -19,7 +19,7 @@ services:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
     ports:
-      - "5000:5000"
+      - "9000:9000"
     restart: unless-stopped
     networks:
       - video_scene_split_net

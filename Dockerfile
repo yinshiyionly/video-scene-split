@@ -43,7 +43,7 @@ RUN git clone https://git.ffmpeg.org/ffmpeg.git ffmpeg_source && \
     --enable-cuvid \
     --enable-nvenc \
     --extra-cflags=-I/usr/local/cuda/include \
-    --extra-ldflags=-L/usr/local/cuda/lib64 \/
+    --extra-ldflags=-L/usr/local/cuda/lib64 \
     --enable-libnpp \
     --enable-gpl \
     --enable-libx264 \

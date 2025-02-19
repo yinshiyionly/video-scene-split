@@ -50,8 +50,7 @@ chmod +x start.sh
 docker pull catchoco/video-scene-split:latest
 
 # 运行容器
-docker run -d \
-  --gpus all \
+docker run --gpus all -it --rm \
   -p 9000:9000 \
   -v /opt/test/data:/app/data \
   -v /opt/test/video-scene-split:/app \

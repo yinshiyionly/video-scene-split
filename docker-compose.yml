@@ -15,8 +15,7 @@ services:
       - NVIDIA_VISIBLE_DEVICES=all
       - NVIDIA_DRIVER_CAPABILITIES=compute,utility
     volumes:
-      - ./server:/app
-      - ./data:/data
+      - ./:/app
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
     ports:

@@ -32,6 +32,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # 下载并安装nv-codec-headers
 RUN git clone https://git.videolan.org/git/ffmpeg/nv-codec-headers.git && \
     cd nv-codec-headers && \
+    git checkout n12.2 && \
     make install PREFIX=/usr/local
 
 # 下载并编译支持NVIDIA硬件加速的FFmpeg
@@ -42,7 +43,7 @@ RUN git clone https://git.ffmpeg.org/ffmpeg.git ffmpeg_source && \
     --enable-cuvid \
     --enable-nvenc \
     --extra-cflags=-I/usr/local/cuda/include \
-    --extra-ldflags=-L/usr/local/cuda/lib64 \
+    --extra-ldflags=-L/usr/local/cuda/lib64 \/
     --enable-libnpp \
     --enable-gpl \
     --enable-libx264 \

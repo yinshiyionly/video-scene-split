@@ -25,3 +25,7 @@ services:
       - default_net
     entrypoint: tail
     command: ["-f", "/dev/null"]
+
+networks:
+  default_net:
+    driver: bridge

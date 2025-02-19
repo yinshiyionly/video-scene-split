@@ -145,7 +145,7 @@ def main():
             # 输出每个视频片段，使用原视频参数
             segment_clip.write_videofile(
                 output_path,
-                codec="libx264",  # 使用 libx264 编码器
+                codec="h264_nvenc",
                 fps=video_clip.fps,
                 bitrate=original_video_bitrate,  # 使用原视频码率
                 preset="medium",  # 使用平衡的预设

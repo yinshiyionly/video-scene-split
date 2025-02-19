@@ -214,7 +214,7 @@ def write_video_segment(
 
             segment_clip.write_videofile(
                 output_path,
-                codec="libx264",
+                codec="h264_nvenc",
                 fps=video_clip.fps,
                 bitrate=original_video_bitrate,
                 preset="medium",

@@ -1,8 +1,8 @@
 # gpu service
 services:
-  video_scene_split:
+  video_scene_split_test:
     image: catchoco/video-scene-split:latest
-    container_name: video_scene_split
+    container_name: video_scene_split_test
     runtime: nvidia
     deploy:
       resources:
@@ -22,6 +22,6 @@ services:
       - "9000:9000"
     restart: unless-stopped
     networks:
-      - video_scene_split_net
+      - video_scene_split_test_net
     entrypoint: tail
     command: ["-f", "/dev/null"]

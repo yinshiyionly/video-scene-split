@@ -30,9 +30,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # 下载并安装nv-codec-headers
-RUN git clone https://git.videolan.org/git/ffmpeg/nv-codec-headers.git && \
+RUN git clone https://github.com/FFmpeg/nv-codec-headers.git && \
     cd nv-codec-headers && \
-    git checkout n12.2 && \
+    git checkout n12.2.72.0 && \
     make install PREFIX=/usr/local
 
 # 下载并编译支持NVIDIA硬件加速的FFmpeg

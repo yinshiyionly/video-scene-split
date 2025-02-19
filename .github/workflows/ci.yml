@@ -3,7 +3,7 @@ name: video-scene-split-build
 on:
   push:
     paths:
-      - '.github/workflows/video-scene-split-build.yml'
+      - '.github/workflows/ci.yml'
       - 'Dockerfile'
 
 jobs:
@@ -38,7 +38,7 @@ jobs:
           file: Dockerfile
           push: true
           tags: |
-            catchoco/transnetv2:latest
+            catchoco/video-scene-split:latest
           platforms: linux/amd64
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max

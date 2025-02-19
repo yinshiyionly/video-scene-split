@@ -1,11 +1,9 @@
 # gpu service
-version: '3.8'
-
 services:
-  transnetv2:
-    image: catchoco/transnetv2:gpu-v1.0
-    container_name: transnetv2
-    runtime: nvidia  # 使用 NVIDIA GPU 支持
+  video_scene_split:
+    image: catchoco/video-scene-split:latest
+    container_name: video_scene_split
+    runtime: nvidia
     deploy:
       resources:
         reservations:
@@ -14,15 +12,14 @@ services:
               count: all
               capabilities: [gpu]
     environment:
-      - NVIDIA_VISIBLE_DEVICES=all  # 让容器使用所有 GPU
+      - NVIDIA_VISIBLE_DEVICES=all
       - NVIDIA_DRIVER_CAPABILITIES=compute,utility
     volumes:
       - ./:/app
+      - /etc/localtime:/etc/localtime
+      - /etc/timezone:/etc/timezone
     ports:
       - "5000:5000"
     restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
+    networks:
+      - video_scene_split_net

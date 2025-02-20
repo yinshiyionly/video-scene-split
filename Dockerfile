@@ -1,82 +1,60 @@
-FROM nvidia/cuda:12.6.3-cudnn-devel-ubuntu22.04
+# Start with the NVIDIA base image.
+FROM nvidia/cuda:12.4.0-devel-ubuntu22.04
 
-# 安装系统依赖
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential \
-    python3-dev \
-    python3-pip \
-    wget \
-    cmake \
-    git \
-    vim \
-    libtool \
-    autoconf \
-    automake \
-    pkg-config \
-    yasm \
-    nasm \
-    zlib1g-dev \
-    libx264-dev \
-    libx265-dev \
-    libvpx-dev \
-    libfdk-aac-dev \
-    libsdl2-dev \
-    libass-dev \
-    libva-dev \
-    libvdpau-dev \
-    libxcb1-dev \
-    libxcb-shm0-dev \
-    libxcb-xfixes0-dev \
-    && rm -rf /var/lib/apt/lists/*
+# Ignore input prompts.
+ENV DEBIAN_FRONTEND noninteractive
 
-# 下载并安装nv-codec-headers 注意显卡驱动版本
-RUN git clone https://github.com/FFmpeg/nv-codec-headers.git && \
-    cd nv-codec-headers && \
-    git checkout n12.2.72.0 && \
-    make install PREFIX=/usr/local
+# Update NVIDIA keys and sources as required for the specific CUDA and Ubuntu version
+RUN apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/3bf863cc.pub
 
-# 下载并编译支持NVIDIA硬件加速的FFmpeg
-RUN git clone https://git.ffmpeg.org/ffmpeg.git ffmpeg_source && \
-    cd ffmpeg_source && \
-    PKG_CONFIG_PATH=/usr/local/lib/pkgconfig ./configure \
-    --enable-cuda \
-    --enable-cuda-nvcc \
-    --enable-cuvid \
-    --enable-nvenc \
-    --extra-cflags=-I/usr/local/cuda/include \
-    --extra-ldflags=-L/usr/local/cuda/lib64 \
-    --enable-libnpp \
-    --enable-gpl \
-    --enable-libx264 \
-    --enable-libx265 \
-    --enable-nonfree && \
-    make -j$(nproc) && \
-    make install
+# Install necessary dependencies and cleanup in the same step
+RUN apt-get update && apt-get install -y \
+  build-essential \
+  ca-certificates \
+  curl \
+  fonts-liberation \
+  git \
+  gnupg2 \
+  libasound2 \
+  libatk-bridge2.0-0 \
+  libatk1.0-0 \
+  libatspi2.0-0 \
+  libcups2 \
+  libgtk-3-0 \
+  libmp3lame-dev \
+  libnspr4 \
+  libnss3 \
+  libpng-dev \
+  libu2f-udev \
+  libvpx-dev \
+  libvulkan1 \
+  libx264-dev \
+  libx265-dev \
+  libxcomposite1 \
+  libxdamage1 \
+  nasm \
+  pkgconf \
+  unzip \
+  wget \
+  xdg-utils \
+  yasm \
+  zip \
+  zlib1g-dev \
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
 
-# 验证FFmpeg是否支持NVIDIA编码器
-RUN ffmpeg -encoders | grep nvenc
+# Clone and install nv-codec-headers
+RUN git clone https://github.com/FFmpeg/nv-codec-headers.git && cd nv-codec-headers && git checkout n12.1.14.0 && make install && cd .. && rm -rf nv-codec-headers
 
-# 设置工作目录
-WORKDIR /app
+# Clone, configure, and install FFMPEG
+RUN git clone https://git.ffmpeg.org/ffmpeg.git && cd ffmpeg && git checkout n6.1 \
+  && ./configure --enable-nonfree --enable-cuda --enable-cuvid --enable-nvenc --enable-nonfree --enable-libnpp --enable-opencl --enable-gpl \
+  --enable-libmp3lame --enable-libx264 --enable-libx265 --enable-libvpx \
+  --extra-cflags=-I/usr/local/cuda/include --extra-ldflags=-L/usr/local/cuda/lib64 \
+  && make -j$(nproc) && make install && cd .. && rm -rf ffmpeg
 
-# 安装Python依赖
-RUN pip3 install --no-cache-dir ffmpeg-python \
-    opencv-python \
-    numpy \
-    flask \
-    gunicorn \
-    tensorflow \
-    pillow \
-    tqdm \
-    moviepy
+# Verify CUDA Toolkit installation
+RUN nvcc --version
 
-# 设置环境变量
-ENV NVIDIA_VISIBLE_DEVICES=all
-ENV NVIDIA_DRIVER_CAPABILITIES=compute,video,utility,graphics
-ENV NVIDIA_REQUIRE_CUDA="cuda>=12.0"
-
-# 暴露API端口
-EXPOSE 9000
-
-# 启动命令
-CMD ["python3", "/app/server/api_server.py"]
+# Final cleanup if needed
+# Add any additional cleanup commands here if necessary
